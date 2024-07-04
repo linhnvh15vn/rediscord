@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { api } from "~/trpc/react";
 
 interface Props {
   // Add your component props here
@@ -35,7 +36,11 @@ export default function ServerForm(props: Props) {
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async () => {};
+  const { mutate: createServer } = api.server.create.useMutation({});
+
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    createServer(data);
+  };
 
   return (
     <Form {...form}>

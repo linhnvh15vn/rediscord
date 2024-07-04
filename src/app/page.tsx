@@ -11,14 +11,10 @@ const InitialModal = dynamic(
 import { api } from "~/trpc/server";
 
 export default async function Page() {
-  const profile = await api.profile.initialProfile();
-
   const server = await api.server.getFirst();
 
-  console.log(server);
-
   if (server) {
-    return redirect(`/servers/${server.id}`);
+    return redirect(`/server/${server.id}`);
   }
 
   return <InitialModal />;

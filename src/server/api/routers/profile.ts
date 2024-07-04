@@ -2,19 +2,23 @@ import { currentUser } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { db } from "~/server/db";
 
 export const profileRouter = createTRPCRouter({
-  initialProfile: publicProcedure.mutation(async ({ ctx }) => {
+  initialProfile: protectedProcedure.mutation(async ({ ctx }) => {
     const user = await currentUser();
     if (!user) {
-      return new TRPCError({ code: "UNAUTHORIZED", message: "Chưa đăng nhập" });
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "Chưa đăng nhập" });
     }
 
     const profile = await db.profile.findUnique({
       where: {
-        userId: ctx.auth.userId!,
+        userId: ctx.auth.userId,
       },
     });
 

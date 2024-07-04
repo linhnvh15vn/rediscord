@@ -92,15 +92,23 @@ export const publicProcedure = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.auth.userId) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "You are not logged in!",
     });
   }
+
+  const profile = await db.profile.findUnique({
+    where: {
+      userId: ctx.auth.userId,
+    },
+  });
+
   return next({
     ctx: {
+      profile,
       auth: ctx.auth,
     },
   });
