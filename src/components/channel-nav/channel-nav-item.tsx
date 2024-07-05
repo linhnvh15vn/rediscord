@@ -8,10 +8,11 @@ import { useParams, useRouter } from "next/navigation";
 import CustomTooltip from "~/components/custom-tooltip";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import { type Channel, type MemberRole } from "~/types";
 
 interface Props {
-  channel: any;
-  role?: any;
+  channel: Channel;
+  role?: MemberRole;
 }
 
 export default function ChannelNavItem({ channel, role }: Props) {

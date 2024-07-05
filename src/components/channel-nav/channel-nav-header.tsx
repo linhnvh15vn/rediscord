@@ -21,10 +21,11 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useModalStore } from "~/store/use-modal-store";
+import { type MemberRole, type Server } from "~/types";
 
 interface Props {
-  server: any;
-  role?: any;
+  server: Server;
+  role?: MemberRole;
 }
 
 export default function ChannelNavHeader({ server, role }: Props) {

@@ -11,11 +11,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
+import { type Channel, type MemberRole } from "~/types";
 
 interface Props {
   label: string;
-  role?: any;
-  channels: any[];
+  role?: MemberRole;
+  channels: Channel[];
 }
 
 export default function ChannelNavSection({ label, role, channels }: Props) {
