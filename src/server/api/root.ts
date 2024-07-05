@@ -1,3 +1,5 @@
+import { channelRouter } from "~/server/api/routers/channel";
+import { memberRouter } from "~/server/api/routers/member";
 import { profileRouter } from "~/server/api/routers/profile";
 import { serverRouter } from "~/server/api/routers/server";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
@@ -10,6 +12,8 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 export const appRouter = createTRPCRouter({
   server: serverRouter,
   profile: profileRouter,
+  member: memberRouter,
+  channel: channelRouter,
 });
 
 // export type definition of API

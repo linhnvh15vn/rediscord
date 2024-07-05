@@ -1,9 +1,22 @@
 import React from "react";
 
+import { redirect } from "next/navigation";
+
+import { api } from "~/trpc/server";
+
 interface Props {
-  // Add your component props here
+  params: {
+    serverId: string;
+  };
 }
 
-export default function Page(props: Props) {
-  return <div>{/* Add your component content here */}</div>;
+export default async function Page({ params }: Props) {
+  const server = await api.server.getById({ id: params.serverId });
+
+  const initialChannel = server?.channels[0];
+  if (initialChannel?.name !== "general") {
+    return null;
+  }
+
+  return redirect(`/server/${params.serverId}/channel/${initialChannel.id}`);
 }

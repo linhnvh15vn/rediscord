@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { schema } from "~/components/schemas/server.schema";
 import {
   createTRPCRouter,
@@ -17,6 +19,26 @@ export const serverRouter = createTRPCRouter({
       },
     });
   }),
+
+  getById: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .query(({ ctx, input }) => {
+      return ctx.db.server.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          channels: {
+            where: {
+              name: "general",
+            },
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+        },
+      });
+    }),
 
   getAll: protectedProcedure.query(({ ctx }) => {
     return ctx.db.server.findMany({

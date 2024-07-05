@@ -1,18 +1,32 @@
 import React from "react";
 
-import ServerNav from "~/components/server-nav";
+import { redirect } from "next/navigation";
+
+import ChannelNav from "~/components/channel-nav";
+import { api } from "~/trpc/server";
 
 interface Props {
   children: React.ReactNode;
+  params: {
+    serverId: string;
+  };
 }
 
-export default function Layout({ children }: Props) {
+export default async function Layout({ children, params }: Props) {
+  const server = await api.server.getById({ id: params.serverId });
+  if (!server) {
+    return redirect("/");
+  }
+
   return (
-    <div className="grid min-h-screen grid-cols-1 md:grid-cols-[80px_minmax(0,1fr)]">
+    <div className="grid min-h-screen md:grid-cols-[240px_minmax(0,1fr)] lg:grid-cols-[240px_minmax(0,1fr)_240px]">
       <div className="hidden md:block">
-        <ServerNav />
+        <ChannelNav serverId={params.serverId} />
       </div>
       <main className="flex-1">{children}</main>
+      <div className="hidden lg:block">
+        {/* <MemberList serverId={params.serverId} /> */}
+      </div>
     </div>
   );
 }
