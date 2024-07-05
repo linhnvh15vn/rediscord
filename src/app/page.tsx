@@ -1,9 +1,21 @@
 import React from "react";
 
-interface Props {
-  // Add your component props here
-}
+import dynamic from "next/dynamic";
+import { redirect } from "next/navigation";
 
-export default function Page(props: Props) {
-  return <div>App</div>;
+const InitialModal = dynamic(
+  () => import("~/components/modals/initial-modal"),
+  { ssr: false },
+);
+
+import { api } from "~/trpc/server";
+
+export default async function Page() {
+  const server = await api.server.getFirst();
+
+  if (server) {
+    return redirect(`/server/${server.id}`);
+  }
+
+  return <InitialModal />;
 }
