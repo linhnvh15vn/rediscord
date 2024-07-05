@@ -5,7 +5,6 @@ import ChannelNavSearch from "~/components/channel-nav/channel-nav-search";
 import ChannelNavSection from "~/components/channel-nav/channel-nav-section";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
-import { db } from "~/server/db";
 import { api } from "~/trpc/server";
 
 interface Props {
@@ -13,10 +12,8 @@ interface Props {
 }
 
 export default async function ChannelNav({ serverId }: Props) {
-  const server = await db.server.findFirst({
-    where: {
-      id: serverId,
-    },
+  const server = await api.server.getById({
+    id: serverId,
     include: {
       channels: {
         orderBy: {

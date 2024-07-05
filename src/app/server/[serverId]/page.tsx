@@ -11,9 +11,22 @@ interface Props {
 }
 
 export default async function Page({ params }: Props) {
-  const server = await api.server.getById({ id: params.serverId });
+  const server = await api.server.getById({
+    id: params.serverId,
+    include: {
+      channels: {
+        where: {
+          name: "general",
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
+    },
+  });
 
   const initialChannel = server?.channels[0];
+
   if (initialChannel?.name !== "general") {
     return null;
   }

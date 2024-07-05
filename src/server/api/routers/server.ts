@@ -21,22 +21,18 @@ export const serverRouter = createTRPCRouter({
   }),
 
   getById: protectedProcedure
-    .input(z.object({ id: z.string().min(1) }))
+    .input(
+      z.object({
+        id: z.string().min(1),
+        include: z.any(),
+      }),
+    )
     .query(({ ctx, input }) => {
       return ctx.db.server.findUnique({
         where: {
           id: input.id,
         },
-        include: {
-          channels: {
-            where: {
-              name: "general",
-            },
-            orderBy: {
-              createdAt: "asc",
-            },
-          },
-        },
+        include: input.include,
       });
     }),
 
