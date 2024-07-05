@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "SERVER";
+export type ModalType = "SERVER" | "DELETE_SERVER";
 
 interface ModalData {}
 

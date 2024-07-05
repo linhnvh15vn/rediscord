@@ -4,6 +4,7 @@ import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter as FontSans } from "next/font/google";
 
+import ModalProvider from "~/components/providers/modal-provider";
 import { ThemeProvider } from "~/components/providers/theme-provider";
 import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";
@@ -39,7 +40,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <TRPCReactProvider>{children}</TRPCReactProvider>
+            <TRPCReactProvider>
+              {children}
+              <ModalProvider />
+            </TRPCReactProvider>
           </ThemeProvider>
         </body>
       </html>
