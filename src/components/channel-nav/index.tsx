@@ -1,6 +1,7 @@
 import React from "react";
 
 import ChannelNavHeader from "~/components/channel-nav/channel-nav-header";
+import ChannelNavSearch from "~/components/channel-nav/channel-nav-search";
 import ChannelNavSection from "~/components/channel-nav/channel-nav-section";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
@@ -45,12 +46,35 @@ export default async function ChannelNav({ serverId }: Props) {
     (channel) => channel.type === "VIDEO",
   );
 
+  const searchData = [
+    {
+      label: "Kênh văn bản",
+      type: "channel",
+      data: textChannels,
+    },
+    {
+      label: "Kênh thoại",
+      type: "channel",
+      data: voiceChannels,
+    },
+    {
+      label: "Kênh video",
+      type: "channel",
+      data: videoChannels,
+    },
+    {
+      label: "Thành viên",
+      type: "member",
+      data: server.members,
+    },
+  ];
+
   return (
     <aside className="sticky top-0 z-10 h-screen">
       <div className="flex h-full flex-col bg-background">
         <ChannelNavHeader server={server} role={currentMember?.role} />
         <ScrollArea className="flex-1 px-2">
-          {/* <ChannelNavSearch data={searchData} /> */}
+          <ChannelNavSearch data={searchData} />
           <Separator />
           {!!textChannels?.length && (
             <ChannelNavSection
