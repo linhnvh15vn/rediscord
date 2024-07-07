@@ -1,5 +1,7 @@
 import React from "react";
 
+import ChannelModal from "~/components/modals/channel-modal";
+import DeleteChannelModal from "~/components/modals/delete-channel-modal";
 import DeleteServerModal from "~/components/modals/delete-server-modal";
 import InviteModal from "~/components/modals/invite-modal";
 import MemberModal from "~/components/modals/member-modal";
@@ -12,6 +14,8 @@ export default function ModalProvider() {
       <DeleteServerModal />
       <InviteModal />
       <MemberModal />
+      <ChannelModal />
+      <DeleteChannelModal />
     </>
   );
 }

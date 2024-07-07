@@ -2,7 +2,13 @@ import { create } from "zustand";
 
 import { type Channel, type Server } from "~/types";
 
-export type ModalType = "SERVER" | "DELETE_SERVER" | "INVITE" | "MEMBER";
+export type ModalType =
+  | "SERVER"
+  | "DELETE_SERVER"
+  | "INVITE"
+  | "MEMBER"
+  | "CHANNEL"
+  | "DELETE_CHANNEL";
 
 interface ModalData {
   server?: Server;
