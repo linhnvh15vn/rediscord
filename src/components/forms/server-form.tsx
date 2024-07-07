@@ -4,10 +4,12 @@ import React from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { type z } from "zod";
 
 import FileUpload from "~/components/file-upload";
-import { schema } from "~/components/schemas/server.schema";
+import {
+  type InferredServerSchema,
+  serverSchema,
+} from "~/components/schemas/server.schema";
 import {
   Form,
   FormField,
@@ -17,29 +19,35 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { useModalStore } from "~/store/use-modal-store";
 import { api } from "~/trpc/react";
 
 interface Props {
   // Add your component props here
 }
 
-const defaultValues: z.infer<typeof schema> = {
+const defaultValues: InferredServerSchema = {
   name: "",
   imageUrl: "",
 };
 
 export default function ServerForm(props: Props) {
-  const form = useForm<z.infer<typeof schema>>({
-    defaultValues,
-    resolver: zodResolver(schema),
+  const { data } = useModalStore();
+
+  const form = useForm<InferredServerSchema>({
+    defaultValues: data.server ?? defaultValues,
+    resolver: zodResolver(serverSchema),
   });
 
   const isLoading = form.formState.isSubmitting;
 
   const { mutate: createServer } = api.server.create.useMutation({});
+  const { mutate: updateServer } = api.server.update.useMutation({});
 
-  const onSubmit = async (data: z.infer<typeof schema>) => {
-    createServer(data);
+  const onSubmit = async (formData: InferredServerSchema) => {
+    data.server
+      ? updateServer({ ...formData, id: data.server.id })
+      : createServer(formData);
   };
 
   return (

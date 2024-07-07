@@ -93,7 +93,10 @@ export default function ChannelNavHeader({ server, role }: Props) {
           </DropdownMenuItem>
         )}
         {!isAdmin && (
-          <DropdownMenuItem className="px-3 py-2 text-destructive">
+          <DropdownMenuItem
+            className="px-3 py-2 text-destructive"
+            onClick={() => onOpen("LEAVE", { server })}
+          >
             Rời khỏi máy chủ
             <LogOut className="ml-auto size-4" />
           </DropdownMenuItem>
