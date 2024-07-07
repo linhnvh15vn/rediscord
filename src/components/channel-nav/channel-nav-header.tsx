@@ -56,13 +56,19 @@ export default function ChannelNavHeader({ server, role }: Props) {
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className="px-3 py-2">
+          <DropdownMenuItem
+            className="px-3 py-2"
+            onClick={() => onOpen("SERVER", { server })}
+          >
             Cài đặt máy chủ
             <Settings className="ml-auto size-4" />
           </DropdownMenuItem>
         )}
         {isAdmin && (
-          <DropdownMenuItem className="px-3 py-2">
+          <DropdownMenuItem
+            className="px-3 py-2"
+            onClick={() => onOpen("MEMBER", { server })}
+          >
             Quản lý thành viên
             <User className="ml-auto size-4" />
           </DropdownMenuItem>
@@ -75,7 +81,10 @@ export default function ChannelNavHeader({ server, role }: Props) {
         )}
         {isModerator && <DropdownMenuSeparator />}
         {isAdmin && (
-          <DropdownMenuItem className="px-3 py-2 text-destructive">
+          <DropdownMenuItem
+            className="px-3 py-2 text-destructive"
+            onClick={() => onOpen("DELETE_SERVER", { server })}
+          >
             Xóa máy chủ
             <Trash className="ml-auto size-4" />
           </DropdownMenuItem>
