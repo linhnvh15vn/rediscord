@@ -7,9 +7,10 @@ import { useRouter, useParams } from "next/navigation";
 
 import CustomTooltip from "~/components/custom-tooltip";
 import { cn } from "~/lib/utils";
+import { type Server } from "~/types";
 
 interface Props {
-  server: any;
+  server: Server;
 }
 
 export default function ServerNavItem({ server }: Props) {
