@@ -11,6 +11,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
+import { useModalStore } from "~/store/use-modal-store";
 import { type Channel, type MemberRole } from "~/types";
 
 interface Props {
@@ -20,6 +21,8 @@ interface Props {
 }
 
 export default function ChannelNavSection({ label, role, channels }: Props) {
+  const { onOpen } = useModalStore();
+
   return (
     <Collapsible defaultOpen className="mt-4">
       <div className="flex items-center justify-between pr-3">
@@ -33,7 +36,7 @@ export default function ChannelNavSection({ label, role, channels }: Props) {
         </CollapsibleTrigger>
         {role !== "GUESS" && (
           <CustomTooltip label="Tạo kênh" side="top">
-            <button type="button">
+            <button type="button" onClick={() => onOpen("CHANNEL", {})}>
               <Plus className="size-4 text-muted-foreground hover:text-accent-foreground" />
             </button>
           </CustomTooltip>
