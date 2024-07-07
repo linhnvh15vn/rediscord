@@ -1,7 +1,10 @@
 import { v4 } from "uuid";
 import { z } from "zod";
 
-import { schema } from "~/components/schemas/server.schema";
+import {
+  serverSchema,
+  updateServerSchema,
+} from "~/components/schemas/server.schema";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -9,12 +12,12 @@ import {
 } from "~/server/api/trpc";
 
 export const serverRouter = createTRPCRouter({
-  getFirst: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.server.findFirst({
+  getAll: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.server.findMany({
       where: {
         members: {
           some: {
-            profileId: ctx.profile?.id,
+            profileId: ctx.profile!.id,
           },
         },
       },
@@ -37,19 +40,19 @@ export const serverRouter = createTRPCRouter({
       });
     }),
 
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.server.findMany({
+  getFirst: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.server.findFirst({
       where: {
         members: {
           some: {
-            profileId: ctx.profile!.id,
+            profileId: ctx.profile?.id,
           },
         },
       },
     });
   }),
 
-  create: protectedProcedure.input(schema).mutation(({ ctx, input }) => {
+  create: protectedProcedure.input(serverSchema).mutation(({ ctx, input }) => {
     return ctx.db.server.create({
       data: {
         name: input.name,
@@ -71,6 +74,30 @@ export const serverRouter = createTRPCRouter({
     });
   }),
 
+  update: protectedProcedure
+    .input(updateServerSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.server.update({
+        data: {
+          name: input.name,
+          imageUrl: input.imageUrl,
+        },
+        where: {
+          id: input.id,
+        },
+      });
+    }),
+
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.server.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
+
   generateInviteUrl: protectedProcedure
     .input(z.object({ serverId: z.string() }))
     .mutation(({ ctx, input }) => {
@@ -86,6 +113,31 @@ export const serverRouter = createTRPCRouter({
           members: {
             include: {
               profile: true,
+            },
+          },
+        },
+      });
+    }),
+
+  leave: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.server.update({
+        data: {
+          members: {
+            deleteMany: {
+              profileId: ctx.profile!.id,
+            },
+          },
+        },
+        where: {
+          id: input.id,
+          profileId: {
+            not: ctx.profile!.id,
+          },
+          members: {
+            some: {
+              profileId: ctx.profile!.id,
             },
           },
         },
