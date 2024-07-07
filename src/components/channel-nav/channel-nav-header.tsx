@@ -47,40 +47,43 @@ export default function ChannelNavHeader({ server, role }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 space-y-0.5 text-xs text-muted-foreground">
         {isModerator && (
-          <DropdownMenuItem className="px-3 py-2 text-primary">
+          <DropdownMenuItem
+            className="px-3 py-2 text-primary"
+            onSelect={() => onOpen("INVITE", { server })}
+          >
             Mời mọi người
-            <UserPlus size={20} className="ml-auto" />
+            <UserPlus className="ml-auto size-4" />
           </DropdownMenuItem>
         )}
         {isAdmin && (
           <DropdownMenuItem className="px-3 py-2">
             Cài đặt máy chủ
-            <Settings size={20} className="ml-auto" />
+            <Settings className="ml-auto size-4" />
           </DropdownMenuItem>
         )}
         {isAdmin && (
           <DropdownMenuItem className="px-3 py-2">
             Quản lý thành viên
-            <User size={20} className="ml-auto" />
+            <User className="ml-auto size-4" />
           </DropdownMenuItem>
         )}
         {isModerator && (
           <DropdownMenuItem className="px-3 py-2">
             Tạo kênh
-            <PlusCircle size={20} className="ml-auto" />
+            <PlusCircle className="ml-auto size-4" />
           </DropdownMenuItem>
         )}
         {isModerator && <DropdownMenuSeparator />}
         {isAdmin && (
           <DropdownMenuItem className="px-3 py-2 text-destructive">
             Xóa máy chủ
-            <Trash size={20} className="ml-auto" />
+            <Trash className="ml-auto size-4" />
           </DropdownMenuItem>
         )}
         {!isAdmin && (
           <DropdownMenuItem className="px-3 py-2 text-destructive">
             Rời khỏi máy chủ
-            <LogOut size={20} className="ml-auto" />
+            <LogOut className="ml-auto size-4" />
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

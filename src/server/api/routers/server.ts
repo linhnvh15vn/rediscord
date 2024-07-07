@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 import { z } from "zod";
 
 import { schema } from "~/components/schemas/server.schema";
@@ -69,4 +70,25 @@ export const serverRouter = createTRPCRouter({
       },
     });
   }),
+
+  generateInviteUrl: protectedProcedure
+    .input(z.object({ serverId: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.server.update({
+        data: {
+          inviteCode: v4(),
+        },
+        where: {
+          id: input.serverId,
+          profileId: ctx.profile!.id,
+        },
+        include: {
+          members: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+      });
+    }),
 });
