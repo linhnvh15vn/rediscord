@@ -25,7 +25,7 @@ export default function InviteModal() {
   const origin = useOrigin();
 
   const isOpen = type === "INVITE";
-  const inviteUrl = `${origin}/invite`;
+  const inviteUrl = `${origin}/invite/${data.server?.inviteCode}`;
 
   const { mutate: generateInviteUrl } =
     api.server.generateInviteUrl.useMutation({
