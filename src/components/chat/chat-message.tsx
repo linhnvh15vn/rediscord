@@ -14,6 +14,7 @@ import { useParams } from "next/navigation";
 import ChatItem from "~/components/chat/chat-item";
 import ChatWelcome from "~/components/chat/chat-welcome";
 import { Button } from "~/components/ui/button";
+import { useChatScroll } from "~/hooks/use-chat-scroll";
 import { pusherClient } from "~/lib/pusher";
 import { api } from "~/trpc/react";
 import { type Member, type Message } from "~/types";
@@ -26,8 +27,9 @@ interface Props {
 
 export default function ChatMessage({ type, name, currentMember }: Props) {
   const params = useParams();
-
   const [incomingMessages, setIncomingMessages] = useState<Message[]>([]);
+  const chatRef = useRef<ElementRef<"div">>(null);
+  const bottomRef = useRef<ElementRef<"div">>(null);
 
   const {
     data,
@@ -43,8 +45,13 @@ export default function ChatMessage({ type, name, currentMember }: Props) {
     },
   );
 
-  const chatRef = useRef<ElementRef<"div">>(null);
-  const bottomRef = useRef<ElementRef<"div">>(null);
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
+    count: data?.pages[0]?.messages.length ?? 0,
+    loadMore: () => void fetchNextPage(),
+  });
 
   useEffect(() => {
     pusherClient.subscribe(params.channelId as string);
