@@ -2,6 +2,7 @@ import React from "react";
 
 import ChannelModal from "~/components/modals/channel-modal";
 import DeleteChannelModal from "~/components/modals/delete-channel-modal";
+import DeleteMessageModal from "~/components/modals/delete-message-modal";
 import DeleteServerModal from "~/components/modals/delete-server-modal";
 import InviteModal from "~/components/modals/invite-modal";
 import LeaveModal from "~/components/modals/leave-modal";
@@ -18,6 +19,7 @@ export default function ModalProvider() {
       <ChannelModal />
       <DeleteChannelModal />
       <LeaveModal />
+      <DeleteMessageModal />
     </>
   );
 }

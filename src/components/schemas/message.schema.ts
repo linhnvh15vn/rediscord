@@ -11,3 +11,7 @@ export const createMessageSchema = messageSchema.extend({
   serverId: z.string().min(1),
   channelId: z.string().min(1),
 });
+
+export const updateMessageSchema = createMessageSchema.partial().extend({
+  id: z.string().min(1),
+});

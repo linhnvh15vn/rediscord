@@ -21,6 +21,8 @@ import { Input } from "~/components/ui/input";
 import UserAvatar from "~/components/user-avatar";
 import { DATE_FORMAT, ROLE_ICON } from "~/constants";
 import { cn, getFileType } from "~/lib/utils";
+import { useModalStore } from "~/store/use-modal-store";
+import { api } from "~/trpc/react";
 import { type Member, type Message } from "~/types";
 
 interface Props {
@@ -35,10 +37,12 @@ export default function ChatItem({ type, message, currentMember }: Props) {
 
   const [isEditing, setIsEditing] = useState(false);
 
+  const { onOpen } = useModalStore();
+
   const form = useForm<InferredMessageSchema>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
-      content: "",
+      content: message.content,
     },
   });
 
@@ -57,17 +61,22 @@ export default function ChatItem({ type, message, currentMember }: Props) {
 
   const isLoading = form.formState.isLoading;
 
-  const onAvatarClick = () => {
-    if (message.member.id === currentMember.id) {
-      return;
-    }
+  const { mutate: updateMessage } = api.message.update.useMutation({
+    onSuccess: () => {
+      setIsEditing(false);
+    },
+  });
 
+  const onAvatarClick = () => {
+    if (message.member.id === currentMember.id) return;
     router.push(
-      `/servers/${params?.serverId as string}/conversations/${message.member.id}`,
+      `/server/${params?.serverId as string}/conversation/${message.member.id}`,
     );
   };
 
-  const onSubmit = async (formData: InferredMessageSchema) => {};
+  const onSubmit = async (formData: InferredMessageSchema) => {
+    updateMessage({ ...formData, id: message.id });
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -185,7 +194,10 @@ export default function ChatItem({ type, message, currentMember }: Props) {
             </CustomTooltip>
           )}
           <CustomTooltip label="Delete">
-            <Trash className="ml-auto size-5" />
+            <Trash
+              className="ml-auto size-5"
+              onClick={() => onOpen("DELETE_MESSAGE", { message })}
+            />
           </CustomTooltip>
         </div>
       )}
