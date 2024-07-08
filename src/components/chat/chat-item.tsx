@@ -136,11 +136,12 @@ export default function ChatItem({ type, message, currentMember }: Props) {
               )}
             >
               {message.content}
-              {message.updatedAt !== message.createdAt && !message.deleted && (
-                <span className="mx-2 text-xs text-muted-foreground">
-                  (edited)
-                </span>
-              )}
+              {message.updatedAt.getTime() !== message.createdAt.getTime() &&
+                !message.deleted && (
+                  <span className="mx-2 text-xs text-muted-foreground">
+                    (edited)
+                  </span>
+                )}
             </p>
           )}
           {!message.fileUrl && isEditing && (
