@@ -11,3 +11,5 @@ export const CHANNEL_ICON = {
   VOICE: <Mic />,
   VIDEO: <Video />,
 };
+
+export const DATE_FORMAT = "d MMM yyy, HH:mm";
