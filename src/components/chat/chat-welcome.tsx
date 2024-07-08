@@ -7,7 +7,7 @@ interface Props {
   name: string;
 }
 
-export default function ChatWelcom({ type, name }: Props) {
+export default function ChatWelcome({ type, name }: Props) {
   return (
     <div className="mb-4 space-y-2 px-4">
       {type === "channel" && (

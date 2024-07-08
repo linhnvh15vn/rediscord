@@ -12,7 +12,7 @@ import { Loader2, ServerCrash } from "lucide-react";
 import { useParams } from "next/navigation";
 
 import ChatItem from "~/components/chat/chat-item";
-import ChatWelcom from "~/components/chat/chat-welcom";
+import ChatWelcome from "~/components/chat/chat-welcome";
 import { Button } from "~/components/ui/button";
 import { pusherClient } from "~/lib/pusher";
 import { api } from "~/trpc/react";
@@ -79,7 +79,7 @@ export default function ChatMessage({ type, name, currentMember }: Props) {
   return (
     <div ref={chatRef} className="flex flex-1 flex-col overflow-y-auto py-4">
       {!hasNextPage && <div className="flex-1" />}
-      {!hasNextPage && <ChatWelcom type={type} name={name} />}
+      {!hasNextPage && <ChatWelcome type={type} name={name} />}
       {hasNextPage && (
         <div className="flex justify-center">
           {isFetchingNextPage ? (
