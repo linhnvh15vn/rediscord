@@ -53,9 +53,10 @@ export default function ChatMessage({ type, name, currentMember }: Props) {
     });
 
     return () => {
+      pusherClient.unbind("sendMessage");
       pusherClient.unsubscribe(params.channelId as string);
     };
-  }, [params]);
+  }, [params.channelId]);
 
   if (isLoading) {
     return (
@@ -103,7 +104,8 @@ export default function ChatMessage({ type, name, currentMember }: Props) {
             ))}
           </Fragment>
         ))}
-
+      </div>
+      <div className="flex flex-col-reverse">
         {incomingMessages.map((message) => (
           <ChatItem
             key={message.id}
