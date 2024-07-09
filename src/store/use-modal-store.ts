@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { type Channel, type Server } from "~/types";
+import { type Message, type Channel, type Server } from "~/types";
 
 export type ModalType =
   | "SERVER"
@@ -9,11 +9,14 @@ export type ModalType =
   | "MEMBER"
   | "CHANNEL"
   | "DELETE_CHANNEL"
-  | "LEAVE";
+  | "LEAVE"
+  | "DELETE_MESSAGE"
+  | "ATTACHMENT";
 
 interface ModalData {
   server?: Server;
   channel?: Channel;
+  message?: Message;
 }
 
 interface ModalStore {
