@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import ChatHeader from "~/components/chat/chat-header";
 import ChatInput from "~/components/chat/chat-input";
 import ChatMessage from "~/components/chat/chat-message";
+import MediaRoom from "~/components/media-room";
 import { api } from "~/trpc/server";
 
 interface Props {
@@ -46,12 +47,12 @@ export default async function Page({ params }: Props) {
           />
         </>
       )}
-      {/* {channel.type === "VOICE" && (
+      {channel.type === "VOICE" && (
         <MediaRoom chatId={channel.id} video={false} audio={true} />
       )}
       {channel.type === "VIDEO" && (
         <MediaRoom chatId={channel.id} video={true} audio={true} />
-      )} */}
+      )}
     </div>
   );
 }
