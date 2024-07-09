@@ -1,3 +1,6 @@
+import { type Prisma } from "@prisma/client";
+import { type DefaultArgs } from "@prisma/client/runtime/library";
+import { TRPCError } from "@trpc/server";
 import { v4 } from "uuid";
 import { z } from "zod";
 
@@ -36,7 +39,39 @@ export const serverRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
-        include: input.include,
+        include: input.include as Prisma.ServerInclude<DefaultArgs>,
+      });
+    }),
+
+  invite: protectedProcedure
+    .input(z.object({ inviteCode: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const existingServer = await ctx.db.server.findFirst({
+        where: {
+          inviteCode: input.inviteCode,
+          members: {
+            some: {
+              profileId: ctx.profile!.id,
+            },
+          },
+        },
+      });
+
+      if (existingServer) {
+        return existingServer;
+      }
+
+      return ctx.db.server.update({
+        data: {
+          members: {
+            create: {
+              profileId: ctx.profile!.id,
+            },
+          },
+        },
+        where: {
+          inviteCode: input.inviteCode,
+        },
       });
     }),
 
