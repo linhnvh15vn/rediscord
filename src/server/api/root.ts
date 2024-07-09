@@ -1,4 +1,6 @@
 import { channelRouter } from "~/server/api/routers/channel";
+import { conversationRouter } from "~/server/api/routers/conversation";
+import { direactMessageRouter } from "~/server/api/routers/direct-message";
 import { memberRouter } from "~/server/api/routers/member";
 import { messageRouter } from "~/server/api/routers/message";
 import { profileRouter } from "~/server/api/routers/profile";
@@ -16,6 +18,8 @@ export const appRouter = createTRPCRouter({
   member: memberRouter,
   channel: channelRouter,
   message: messageRouter,
+  conversation: conversationRouter,
+  directMessage: direactMessageRouter,
 });
 
 // export type definition of API
