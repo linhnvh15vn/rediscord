@@ -17,15 +17,21 @@ import { Button } from "~/components/ui/button";
 import { useChatScroll } from "~/hooks/use-chat-scroll";
 import { pusherClient } from "~/lib/pusher";
 import { api } from "~/trpc/react";
-import { type Member, type Message } from "~/types";
+import { type DirectMessage, type Member, type Message } from "~/types";
 
 interface Props {
   type: "channel" | "conversation";
   name: string; // Channel name or member name
+  chatId?: string;
   currentMember: Member;
 }
 
-export default function ChatMessage({ type, name, currentMember }: Props) {
+export default function ChatMessage({
+  type,
+  name,
+  chatId,
+  currentMember,
+}: Props) {
   const params = useParams();
   const [incomingMessages, setIncomingMessages] = useState<Message[]>([]);
   const chatRef = useRef<ElementRef<"div">>(null);
@@ -38,18 +44,22 @@ export default function ChatMessage({ type, name, currentMember }: Props) {
     isFetchingNextPage,
     isLoading,
     isError,
-  } = api.message.get.useInfiniteQuery(
-    { channelId: params.channelId as string },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  );
+  } =
+    type === "channel"
+      ? api.message.get.useInfiniteQuery(
+          { channelId: params.channelId as string },
+          { getNextPageParam: (lastPage) => lastPage.nextCursor },
+        )
+      : api.directMessage.get.useInfiniteQuery(
+          { conversationId: chatId! },
+          { getNextPageParam: (lastPage) => lastPage.nextCursor },
+        );
 
   useChatScroll({
     chatRef,
     bottomRef,
     shouldLoadMore: !isFetchingNextPage && !!hasNextPage,
-    count: data?.pages[0]?.messages.length ?? 0,
+    count: data?.pages[0]?.items.length ?? 0,
     loadMore: () => void fetchNextPage(),
   });
 
@@ -101,7 +111,7 @@ export default function ChatMessage({ type, name, currentMember }: Props) {
       <div className="mt-auto flex flex-col-reverse">
         {data?.pages.map((group, i) => (
           <Fragment key={i}>
-            {group.messages.map((message: Message) => (
+            {group.items.map((message: Message | DirectMessage) => (
               <ChatItem
                 key={message.id}
                 type={type}
@@ -112,7 +122,7 @@ export default function ChatMessage({ type, name, currentMember }: Props) {
           </Fragment>
         ))}
       </div>
-      <div className="flex flex-col-reverse">
+      <div className="flex flex-col">
         {incomingMessages.map((message) => (
           <ChatItem
             key={message.id}

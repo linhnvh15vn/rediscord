@@ -23,11 +23,11 @@ import { DATE_FORMAT, ROLE_ICON } from "~/constants";
 import { cn, getFileType } from "~/lib/utils";
 import { useModalStore } from "~/store/use-modal-store";
 import { api } from "~/trpc/react";
-import { type Member, type Message } from "~/types";
+import { type DirectMessage, type Member, type Message } from "~/types";
 
 interface Props {
   type: "channel" | "conversation";
-  message: Message;
+  message: Message | DirectMessage;
   currentMember: Member;
 }
 
