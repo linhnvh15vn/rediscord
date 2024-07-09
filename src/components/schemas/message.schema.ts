@@ -7,6 +7,14 @@ export const messageSchema = z.object({
 
 export type InferredMessageSchema = z.infer<typeof messageSchema>;
 
+export const attachmentMessageSchema = z.object({
+  fileUrl: z.string(),
+});
+
+export type InferredAttachmentMessageSchema = z.infer<
+  typeof attachmentMessageSchema
+>;
+
 export const createMessageSchema = messageSchema.extend({
   serverId: z.string().min(1),
   channelId: z.string().min(1),

@@ -145,7 +145,7 @@ export default function ChatItem({ type, message, currentMember }: Props) {
               )}
             >
               {message.content}
-              {message.updatedAt.getTime() !== message.createdAt.getTime() &&
+              {message.updatedAt.toString() !== message.createdAt.toString() &&
                 !message.deleted && (
                   <span className="mx-2 text-xs text-muted-foreground">
                     (edited)

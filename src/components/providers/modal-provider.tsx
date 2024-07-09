@@ -1,5 +1,6 @@
 import React from "react";
 
+import AttachmentModal from "~/components/modals/attachment-modal";
 import ChannelModal from "~/components/modals/channel-modal";
 import DeleteChannelModal from "~/components/modals/delete-channel-modal";
 import DeleteMessageModal from "~/components/modals/delete-message-modal";
@@ -20,6 +21,7 @@ export default function ModalProvider() {
       <DeleteChannelModal />
       <LeaveModal />
       <DeleteMessageModal />
+      <AttachmentModal />
     </>
   );
 }

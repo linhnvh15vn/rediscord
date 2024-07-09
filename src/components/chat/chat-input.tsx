@@ -14,6 +14,7 @@ import {
 } from "~/components/schemas/message.schema";
 import { Form, FormField, FormItem, FormControl } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { useModalStore } from "~/store/use-modal-store";
 import { api } from "~/trpc/react";
 
 interface Props {
@@ -24,6 +25,7 @@ interface Props {
 
 export default function ChatInput({ type, name, query }: Props) {
   const params = useParams();
+  const { onOpen } = useModalStore();
 
   const form = useForm<InferredMessageSchema>({
     resolver: zodResolver(messageSchema),
@@ -57,6 +59,7 @@ export default function ChatInput({ type, name, query }: Props) {
                   <button
                     type="button"
                     className="absolute left-8 top-1/2 -translate-y-1/2"
+                    onClick={() => onOpen("ATTACHMENT", {})}
                   >
                     <Plus />
                   </button>
