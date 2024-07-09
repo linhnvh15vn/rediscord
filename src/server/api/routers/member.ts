@@ -8,6 +8,19 @@ import {
 } from "~/server/api/trpc";
 
 export const memberRouter = createTRPCRouter({
+  getAll: protectedProcedure
+    .input(z.object({ serverId: z.string().min(1) }))
+    .query(({ ctx, input }) => {
+      return ctx.db.member.findMany({
+        where: {
+          serverId: input.serverId,
+        },
+        include: {
+          profile: true,
+        },
+      });
+    }),
+
   getCurrentMember: protectedProcedure.query(({ ctx }) => {
     return ctx.db.member.findFirst({
       where: {

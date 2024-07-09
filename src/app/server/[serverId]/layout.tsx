@@ -3,6 +3,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 
 import ChannelNav from "~/components/channel-nav";
+import MemberNav from "~/components/member-nav";
 import { api } from "~/trpc/server";
 
 interface Props {
@@ -25,7 +26,7 @@ export default async function Layout({ children, params }: Props) {
       </div>
       <main className="flex-1">{children}</main>
       <div className="hidden lg:block">
-        {/* <MemberList serverId={params.serverId} /> */}
+        <MemberNav serverId={params.serverId} />
       </div>
     </div>
   );

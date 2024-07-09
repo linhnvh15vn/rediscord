@@ -3,6 +3,7 @@ import React from "react";
 import { Hash } from "lucide-react";
 
 import ChatVideoButton from "~/components/chat/chat-video-button";
+import MemberToggle from "~/components/member-toggle";
 import MobileToggle from "~/components/mobile-toggle";
 import UserAvatar from "~/components/user-avatar";
 
@@ -24,6 +25,7 @@ export default function ChatHeader({ type, name, serverId, imageUrl }: Props) {
       <span className="text-md font-semibold">{name}</span>
       <div className="ml-auto flex items-center gap-3">
         {type === "conversation" && <ChatVideoButton />}
+        <MemberToggle serverId={serverId} />
       </div>
     </div>
   );
