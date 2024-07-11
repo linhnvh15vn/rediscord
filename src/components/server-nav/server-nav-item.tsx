@@ -34,7 +34,7 @@ export default function ServerNavItem({ server }: Props) {
             params?.serverId === server.id && "rounded-2xl",
           )}
           onClick={() => {
-            router.push(`/server/${id}`);
+            router.push(`/server/${server.id}`);
           }}
         >
           <Image

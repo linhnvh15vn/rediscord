@@ -16,7 +16,7 @@ export type Member = _Member & {
 export type Channel = _Channel;
 
 export type Server = _Server & {
-  members: Member[];
+  members?: Member[];
 };
 
 export type Message = _Message & {

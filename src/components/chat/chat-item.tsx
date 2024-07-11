@@ -105,7 +105,7 @@ export default function ChatItem({ type, message, currentMember }: Props) {
             <CustomTooltip label={message.member.role}>
               {ROLE_ICON[message.member.role]}
             </CustomTooltip>
-            <span className="ml-2 text-xs text-muted-foreground">
+            <span className="text-xs text-muted-foreground">
               {format(new Date(message.createdAt), DATE_FORMAT)}
             </span>
           </div>
@@ -177,27 +177,28 @@ export default function ChatItem({ type, message, currentMember }: Props) {
                 </Button>
               </form>
               <span className="mt-1 text-xs text-muted-foreground">
-                Press esc to cancel, enter to save
+                Ấn Esc để hủy, Enter để lưu
               </span>
             </Form>
           )}
         </div>
       </div>
       {canDeleteMessage && (
-        <div className="absolute -top-2 right-5 hidden items-center gap-2 rounded-sm border bg-accent p-1 shadow-md group-hover:flex">
+        <div className="absolute -top-3 right-5 z-10 hidden items-center rounded-sm border bg-background group-hover:flex">
           {canEditMessage && (
-            <CustomTooltip label="Edit">
-              <Edit
-                className="ml-auto size-5"
-                onClick={() => setIsEditing(true)}
-              />
+            <CustomTooltip label="Sửa">
+              <button className="p-2 hover:bg-zinc-200 hover:dark:bg-zinc-900">
+                <Edit className="size-4" onClick={() => setIsEditing(true)} />
+              </button>
             </CustomTooltip>
           )}
-          <CustomTooltip label="Delete">
-            <Trash
-              className="ml-auto size-5"
-              onClick={() => onOpen("DELETE_MESSAGE", { message })}
-            />
+          <CustomTooltip label="Xóa">
+            <button className="p-2 hover:bg-zinc-200 hover:dark:bg-zinc-900">
+              <Trash
+                className="size-4"
+                onClick={() => onOpen("DELETE_MESSAGE", { message })}
+              />
+            </button>
           </CustomTooltip>
         </div>
       )}

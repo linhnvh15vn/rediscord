@@ -3,6 +3,7 @@ import React from "react";
 import { UserButton } from "@clerk/nextjs";
 
 import { ModeToggle } from "~/components/mode-toggle";
+import NotificationToggle from "~/components/notification-toggle";
 import ServerNavAction from "~/components/server-nav/server-nav-action";
 import ServerNavItem from "~/components/server-nav/server-nav-item";
 import { ScrollArea } from "~/components/ui/scroll-area";
@@ -23,7 +24,7 @@ export default async function ServerNav() {
           ))}
         </ScrollArea>
         <div className="flex flex-col items-center gap-y-4">
-          {/* <ToggleNotification /> */}
+          <NotificationToggle />
           <ModeToggle />
           <UserButton
             appearance={{
