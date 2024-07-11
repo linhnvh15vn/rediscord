@@ -5,6 +5,7 @@ import {
   createMessageSchema,
   updateMessageSchema,
 } from "~/components/schemas/message.schema";
+import { pushNotifications } from "~/lib/beams";
 import { pusherServer } from "~/lib/pusher";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { type Message } from "~/types";
@@ -85,7 +86,11 @@ export const messageRouter = createTRPCRouter({
           },
         },
         include: {
-          members: true,
+          members: {
+            include: {
+              profile: true,
+            },
+          },
         },
       });
 
@@ -129,6 +134,20 @@ export const messageRouter = createTRPCRouter({
       });
 
       void pusherServer.trigger(input.channelId, "sendMessage", message);
+      pushNotifications
+        .publishToInterests([channel.id], {
+          web: {
+            notification: {
+              title: "Bạn có tin nhắn mới!",
+              body: message.content,
+              hide_notification_if_site_has_focus: true,
+              icon: member.profile.imageUrl,
+            },
+          },
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
 
       return message;
     }),

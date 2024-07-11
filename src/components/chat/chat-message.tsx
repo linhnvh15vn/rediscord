@@ -15,6 +15,7 @@ import ChatItem from "~/components/chat/chat-item";
 import ChatWelcome from "~/components/chat/chat-welcome";
 import { Button } from "~/components/ui/button";
 import { useChatScroll } from "~/hooks/use-chat-scroll";
+import { beamsClient } from "~/lib/beams-client";
 import { pusherClient } from "~/lib/pusher";
 import { api } from "~/trpc/react";
 import { type DirectMessage, type Member, type Message } from "~/types";
@@ -73,6 +74,13 @@ export default function ChatMessage({
       pusherClient.unbind("sendMessage");
       pusherClient.unsubscribe(params.channelId as string);
     };
+  }, [params.channelId]);
+
+  useEffect(() => {
+    beamsClient
+      .start()
+      .then(() => beamsClient.addDeviceInterest(params.channelId as string))
+      .catch(console.error);
   }, [params.channelId]);
 
   if (isLoading) {
