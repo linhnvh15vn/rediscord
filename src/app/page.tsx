@@ -11,6 +11,7 @@ const InitialModal = dynamic(
 import { api } from "~/trpc/server";
 
 export default async function Page() {
+  const profile = await api.profile.initialProfile();
   const server = await api.server.getFirst();
 
   if (server) {
