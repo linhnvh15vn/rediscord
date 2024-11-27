@@ -34,13 +34,21 @@ export const serverRouter = createTRPCRouter({
         include: z.any(),
       }),
     )
-    .query(({ ctx, input }) => {
-      return ctx.db.server.findUnique({
+    .query(async ({ ctx, input }) => {
+      const server = await ctx.db.server.findUnique({
         where: {
           id: input.id,
         },
         include: input.include as Prisma.ServerInclude<DefaultArgs>,
       });
+
+      if (!server)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No server found with this id.",
+        });
+
+      return server;
     }),
 
   invite: protectedProcedure

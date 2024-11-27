@@ -12,88 +12,54 @@ interface Props {
 }
 
 export default async function ChannelNav({ serverId }: Props) {
-  const server = await api.server.getById({
-    id: serverId,
-    include: {
-      channels: {
-        orderBy: {
-          createdAt: "asc",
-        },
+  const [server, currentMember] = await Promise.all([
+    api.server.getById({
+      id: serverId,
+      include: {
+        channels: { orderBy: { createdAt: "asc" } },
+        members: { include: { profile: true }, orderBy: { role: "asc" } },
       },
-      members: {
-        include: {
-          profile: true,
-        },
-        orderBy: {
-          role: "asc",
-        },
-      },
+    }),
+    api.member.getCurrentMember(),
+  ]);
+
+  const categorizedChannels = server.channels.reduce(
+    (acc, channel) => {
+      acc[channel.type]?.push(channel);
+      return acc;
     },
-  });
-
-  const currentMember = await api.member.getCurrentMember();
-
-  const textChannels = server.channels.filter(
-    (channel) => channel.type === "TEXT",
-  );
-  const voiceChannels = server.channels.filter(
-    (channel) => channel.type === "VOICE",
-  );
-  const videoChannels = server.channels.filter(
-    (channel) => channel.type === "VIDEO",
+    { TEXT: [], VOICE: [], VIDEO: [] },
   );
 
   const searchData = [
-    {
-      label: "Kênh văn bản",
-      type: "channel",
-      data: textChannels,
-    },
-    {
-      label: "Kênh thoại",
-      type: "channel",
-      data: voiceChannels,
-    },
-    {
-      label: "Kênh video",
-      type: "channel",
-      data: videoChannels,
-    },
-    {
-      label: "Thành viên",
-      type: "member",
-      data: server.members,
-    },
+    { label: "Kênh văn bản", type: "channel", data: categorizedChannels.TEXT },
+    { label: "Kênh thoại", type: "channel", data: categorizedChannels.VOICE },
+    { label: "Kênh video", type: "channel", data: categorizedChannels.VIDEO },
+    { label: "Thành viên", type: "member", data: server.members },
   ];
+
+  const renderChannelSections = () =>
+    Object.entries(categorizedChannels).map(([type, channels]) => {
+      if (!channels.length) return null;
+      const label = type === "TEXT" ? "Text Channels" : `${type} Channels`;
+      return (
+        <ChannelNavSection
+          key={type}
+          label={label}
+          role={currentMember?.role}
+          channels={channels}
+        />
+      );
+    });
 
   return (
     <aside className="sticky top-0 z-10 h-screen">
-      <div className="flex h-full flex-col bg-background">
+      <div className="flex h-full w-60 flex-col bg-background">
         <ChannelNavHeader server={server} role={currentMember?.role} />
         <ScrollArea className="flex-1 px-2">
           <ChannelNavSearch data={searchData} />
           <Separator />
-          {!!textChannels?.length && (
-            <ChannelNavSection
-              label="Text Channels"
-              role={currentMember?.role}
-              channels={textChannels}
-            />
-          )}
-          {!!voiceChannels?.length && (
-            <ChannelNavSection
-              label="Voice Channels"
-              role={currentMember?.role}
-              channels={voiceChannels}
-            />
-          )}
-          {!!videoChannels?.length && (
-            <ChannelNavSection
-              label="Video Channels"
-              role={currentMember?.role}
-              channels={videoChannels}
-            />
-          )}
+          {renderChannelSections()}
         </ScrollArea>
       </div>
     </aside>

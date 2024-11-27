@@ -20,7 +20,7 @@ export default async function Layout({ children, params }: Props) {
   }
 
   return (
-    <div className="grid min-h-screen md:grid-cols-[240px_minmax(0,1fr)] lg:grid-cols-[240px_minmax(0,1fr)_240px]">
+    <div className="flex">
       <div className="hidden md:block">
         <ChannelNav serverId={params.serverId} />
       </div>

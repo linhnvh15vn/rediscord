@@ -19,7 +19,7 @@ export default async function MemberNav({ serverId }: Props) {
   }
 
   return (
-    <div className="h-full">
+    <aside className="h-full w-60">
       <div className="flex h-12 items-center border-b px-3">
         <span className="text-md flex items-center gap-2 font-semibold">
           <Users className="text-muted-foreground" />
@@ -35,6 +35,6 @@ export default async function MemberNav({ serverId }: Props) {
           />
         ))}
       </ScrollArea>
-    </div>
+    </aside>
   );
 }

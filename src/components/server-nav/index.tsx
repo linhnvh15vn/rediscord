@@ -14,16 +14,16 @@ export default async function ServerNav() {
   const servers = await api.server.getAll();
 
   return (
-    <aside className="sticky top-0 z-30 h-screen">
-      <div className="flex h-full flex-col items-center space-y-4 border-r bg-background py-3">
+    <aside className="sticky top-0 z-30 h-full">
+      <div className="flex h-full w-20 flex-col items-center gap-4 border-r bg-background py-4">
         <ServerNavAction />
-        <Separator className=" w-1/2 rounded-md" />
+        <Separator className=" w-1/2" />
         <ScrollArea className="w-full flex-1">
           {servers.map((server) => (
             <ServerNavItem key={server.id} server={server} />
           ))}
         </ScrollArea>
-        <div className="flex flex-col items-center gap-y-4">
+        <div className="flex flex-col items-center gap-4">
           <NotificationToggle />
           <ModeToggle />
           <UserButton
